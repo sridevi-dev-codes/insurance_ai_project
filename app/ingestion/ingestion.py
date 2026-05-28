@@ -46,31 +46,6 @@ def ingest_pdf(file_path):
    # FIXME: I am running a  for loop to add documents with ids. but it should ideally work with batch add_documents.
    for i, chunk in enumerate(chunks):
        vector_store.add_documents([chunk], ids=[f"{chunk.metadata['source']}_{chunk.metadata['page']}_{i}"])
-    #    time.sleep(3)   
-#    for i, chunk in enumerate(chunks):
-#     try:
-#         vector_store.add_documents(
-#             [chunk],
-#             ids=[f"{chunk.metadata['source']}_{chunk.metadata['page']}_{i}"]
-#         )
-#         print(f"Added document index {i} to DB")
-#     except Exception as e:
-#         print(f"Failed to add document index {i}: {e}")
-   
-#    for i, chunk in enumerate(chunks):
-#        vector_store.add_documents([chunk], ids=[f"{chunk.metadata['source']}_{chunk.metadata['page']}_{i}"])
-
-#    for i, chunk in enumerate(chunks):
-#        try:
-#          vector_store.add_documents([chunk], ids=[f"{chunk.metadata['source']}_{chunk.metadata['page']}_{i}")
-#          print(f"Added chunk {i} to DB")
-#        except Exception as e:
-#           print(f"Error addind chunk {i}:{e}")
-#    vector_store.add_documents(chunks)
-
-
-
-
 
    print("======Ingestion Completed Successfully!=======")
 
