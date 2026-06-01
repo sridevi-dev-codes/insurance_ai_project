@@ -1,4 +1,3 @@
-# from pydantic import BaseModel, Field
 from pydantic import BaseModel, Field, field_validator
 from typing import List, Dict, Any
 
@@ -46,36 +45,21 @@ class ClaimDetails(BaseModel):
         return v
 
 class ClaimRequest(BaseModel):
-    question: str = Field(
-        ...,
-        example="Is this motor insurance claim eligible for coverage?"
-    )
+    question: str = Field(...)
 
     claim_details: ClaimDetails
 
 class ClaimAssessmentResponse(BaseModel):
     claim_id: str
 
-    eligibility: str = Field(
-        ...,
-        example="Approved"
-    )
-
-    fraud_risk: str = Field(
-        ...,
-        example="Low"
-    )
-
-    recommended_payout: float = Field(
-        ...,
-        example=290000
-    )
+    eligibility: str = Field(...)
+    fraud_risk: str = Field(...)
+    recommended_payout: float = Field(...)
 
     reasoning: List[str]
-
     citations: List[str]
 
-    retrieved_documents: list[str] = []
+    retrieved_documents: List[str] = Field(default_factory=list)
 
 
 
