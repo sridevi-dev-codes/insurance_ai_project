@@ -1,2 +1,8 @@
 # Ignore environment variables
 .env
+app/ingestion/__pycache__/ingestion.cpython-313.pyc
+app/agents/__pycache__/manager_agent.cpython-313.pyc
+app/agents/__pycache__/manager_agent.cpython-313.pyc
+app/ingestion/__pycache__/ingestion.cpython-313.pyc
+app/retrieval/__pycache__/search.cpython-313.pyc
+app/agents/__pycache__/manager_agent.cpython-313.pyc
