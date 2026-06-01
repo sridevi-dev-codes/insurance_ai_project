@@ -39,46 +39,78 @@ def hybrid_search_tool(query: str) -> str:
     print("***TOOL USED: hybrid SEARCH")
     print("Query:", query)
     results = hybrid_search(query, k=5)
+    # print("TOOL O/P:", )
     return format_results(results)
 
-def format_results(results: list[dict]) -> dict:
+def format_results(results: list[dict]) -> str:
     """
-    Returns structured retrieval output for citations + documents
-    Includes page numbers in citations.
+    Return LLM-safe string BUT preserves structured citation info
     """
 
     if not results:
-        return {
-            "text": "",
-            "citations": [],
-            "retrieved_documents": []
-        }
+        return "No relevant insurance documents found."
 
-    citations = []
-    retrieved_documents = set()
     formatted_chunks = []
 
     for r in results:
         content = r.get("content", "").strip()
         meta = r.get("metadata", {}) or {}
 
-        # Document source / filenam
-        source = meta.get("source") or meta.get("file_name") or "unknown_document"
-        retrieved_documents.add(source)
-
-        # Page number (if exists)
         page = meta.get("page", "N/A")
+        qno = meta.get("question_no") or meta.get("q_no") or ""
 
-        # Citation format with page number
-        citations.append(f"(Page {page}) {content}")
+        # Build strong citation line
+        if qno:
+            formatted_chunks.append(f"(Page {page}) Q{qno}: {content}")
+        else:
+            formatted_chunks.append(f"(Page {page}) {content}")
+    # print('TOOL O?P:',formatted_chunks)
+    return "\n\n".join(formatted_chunks)
 
-        formatted_chunks.append(content)
+# def format_results(results: list[dict]) -> dict:
+#     """
+#     Returns structured retrieval output for citations + documents
+#     Includes page numbers in citations.
+#     """
 
-    return {
-        "text": "\n\n".join(formatted_chunks),
-        "citations": citations,
-        "retrieved_documents": list(retrieved_documents)
-    }
+#     if not results:
+#         return {
+#             "text": "",
+#             "citations": [],
+#             "retrieved_documents": []
+#         }
+
+#     citations = []
+#     retrieved_documents = set()
+#     formatted_chunks = []
+
+#     for r in results:
+#         content = r.get("content", "").strip()
+#         meta = r.get("metadata", {}) or {}
+
+#         # Document source / filenam
+#         source = meta.get("source") or meta.get("file_name") or "unknown_document"
+#         retrieved_documents.add(source)
+
+#         # Page number (if exists)
+#         page = meta.get("page", "N/A")
+
+#         # Citation format with page number
+#         citations.append(f"(Page {page}) {content}")
+
+#         formatted_chunks.append(content)
+#     data = {
+#     "text": "\n\n".join(formatted_chunks),
+#     "citations": citations,
+#     "retrieved_documents": list(retrieved_documents)
+# }
+
+#     print("TOOL O/P:",data)
+#     return {
+#         "text": "\n\n".join(formatted_chunks),
+#         "citations": citations,
+#         "retrieved_documents": list(retrieved_documents)
+#     }
 
 # def format_results(results: list[dict]) -> str:
 #     """

@@ -34,20 +34,30 @@ async def upload_pdf(
 async def query_claim(data: ClaimRequest):
     try:
         # --- Structured message: question and claim separately ---
-        content = f"""
-QUESTION:
-{data.question}
-
-CLAIM_DETAILS:
-{json.dumps(data.claim_details.model_dump(), indent=2)}
-"""
-
-        # Call agent
         response = manager_agent.invoke({
-            "messages": [
-                {"role": "user", "content": content}
-            ]
-        })
+                        "messages": [
+                            {
+                                "role": "user",
+                                "content": [
+                                    {
+                                        "type": "text",
+                                        "text": f"QUESTION:\n{data.question}"
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "CLAIM_DETAILS:"
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": json.dumps(
+                                            data.claim_details.model_dump(),
+                                            indent=2
+                                        )
+                                    }
+                                ]
+                            }
+                        ]
+                    })
 
         raw = response["messages"][-1].content
         # print("raw response",raw)
